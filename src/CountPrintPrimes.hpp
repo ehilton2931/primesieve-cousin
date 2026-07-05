@@ -35,7 +35,7 @@ public:
 private:
   uint64_t low_ = 0;
   /// Count lookup tables for prime k-tuplets
-  Vector<uint8_t> kCounts_[6];
+  Vector<uint8_t> kCounts_[COUNTS_INDEX_LENGTH];
   Vector<char> charBuffer_;
   counts_t& counts_;
   /// Reference to the associated PrimeSieve object

@@ -30,7 +30,7 @@ using namespace primesieve;
 
 namespace {
 
-const uint64_t bitmasks[6][5] =
+const uint64_t bitmasks[COUNTS_INDEX_LENGTH][5] =
 {
   { ~0ull },                         // Prime numbers, unused
   { 0x06, 0x18, 0xc0, ~0ull },       // Twin primes: b00000110, b00011000, b11000000
@@ -113,7 +113,7 @@ CountPrintPrimes::CountPrintPrimes(PrimeSieve& ps) :
 ///
 void CountPrintPrimes::initCounts()
 {
-  for (unsigned i = 1; i < counts_.size(); i++)
+  for (unsigned i = COUNTS_INDEX_TWINS; i < counts_.size(); i++)
   {
     if (ps_.isCount(i))
     {
@@ -147,7 +147,7 @@ void CountPrintPrimes::sieve()
     sieveSegment();
 
     if (ps_.isCountPrimes())
-      counts_[0] += popcount(sieve_);
+      counts_[COUNTS_INDEX_PRIMES] += popcount(sieve_);
     if (ps_.isCountkTuplets())
       countkTuplets();
     if (ps_.isPrintPrimes())
@@ -162,7 +162,7 @@ void CountPrintPrimes::sieve()
 void CountPrintPrimes::countkTuplets()
 {
   // i = 1 twins, i = 2 triplets, ...
-  for (unsigned i = 1; i < counts_.size(); i++)
+  for (unsigned i = COUNTS_INDEX_TWINS; i < counts_.size(); i++)
   {
     if (ps_.isCount(i))
     {
@@ -217,7 +217,7 @@ void CountPrintPrimes::printPrimes()
 void CountPrintPrimes::printkTuplets()
 {
   // i = 1 twins, i = 2 triplets, ...
-  unsigned i = 1;
+  unsigned i = COUNTS_INDEX_TWINS;
   uint64_t low = low_;
   charBuffer_.clear();
   const uint8_t* sieve = (const uint8_t*) sieve_.data();

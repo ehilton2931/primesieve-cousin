@@ -45,42 +45,42 @@ uint64_t count_primes(uint64_t start, uint64_t stop)
 {
   ParallelSieve ps;
   ps.sieve(start, stop, COUNT_PRIMES);
-  return ps.getCount(0);
+  return ps.getCount(COUNTS_INDEX_PRIMES);
 }
 
 uint64_t count_twins(uint64_t start, uint64_t stop)
 {
   ParallelSieve ps;
   ps.sieve(start, stop, COUNT_TWINS);
-  return ps.getCount(1);
+  return ps.getCount(COUNTS_INDEX_TWINS);
 }
 
 uint64_t count_triplets(uint64_t start, uint64_t stop)
 {
   ParallelSieve ps;
   ps.sieve(start, stop, COUNT_TRIPLETS);
-  return ps.getCount(2);
+  return ps.getCount(COUNTS_INDEX_TRIPLETS);
 }
 
 uint64_t count_quadruplets(uint64_t start, uint64_t stop)
 {
   ParallelSieve ps;
   ps.sieve(start, stop, COUNT_QUADRUPLETS);
-  return ps.getCount(3);
+  return ps.getCount(COUNTS_INDEX_QUADRUPLETS);
 }
 
 uint64_t count_quintuplets(uint64_t start, uint64_t stop)
 {
   ParallelSieve ps;
   ps.sieve(start, stop, COUNT_QUINTUPLETS);
-  return ps.getCount(4);
+  return ps.getCount(COUNTS_INDEX_QUINTUPLETS);
 }
 
 uint64_t count_sextuplets(uint64_t start, uint64_t stop)
 {
   ParallelSieve ps;
   ps.sieve(start, stop, COUNT_SEXTUPLETS);
-  return ps.getCount(5);
+  return ps.getCount(COUNTS_INDEX_SEXTUPLETS);
 }
 
 void print_primes(uint64_t start, uint64_t stop)

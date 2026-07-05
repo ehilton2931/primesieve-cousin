@@ -70,8 +70,9 @@ void countSmallPrimes()
 
 void countPrimeKTuplets()
 {
-  const Array<uint64_t, 5> kTupletCounts =
+  const Array<uint64_t, COUNTS_INDEX_LENGTH> kTupletCounts =
   {
+    0,        // Unused
     17278660, // PrimePi2(10^12, 10^12+10^10)
     2130571,  // PrimePi3(10^13, 10^13+10^10)
     38270,    // PrimePi4(10^14, 10^14+10^10)
@@ -82,18 +83,17 @@ void countPrimeKTuplets()
   uint64_t start = (uint64_t) 1e12;
   size_t j = 12;
 
-  for (size_t i = 0; i < kTupletCounts.size(); i++)
+  for (size_t i = COUNTS_INDEX_TWINS; i < kTupletCounts.size(); i++)
   {
     uint64_t stop = start + (uint64_t) 1e10;
-    int k = (int) (i + 2);
-    int countKTuplet = COUNT_PRIMES << (k - 1);
+    int countKTuplet = COUNT_PRIMES << i;
 
     ParallelSieve ps;
     ps.addFlags(countKTuplet);
     ps.sieve(start, stop);
-    uint64_t count = ps.getCount(k - 1);
+    uint64_t count = ps.getCount(i);
     std::ostringstream oss;
-    oss << "PrimePi" << k << "(10^" << j << ", 10^" << j << "+10^10) = " << count;
+    oss << "PrimePi" << ((int) (i + 1)) << "(10^" << j << ", 10^" << j << "+10^10) = " << count;
     std::cout << std::left << std::setw(39) << oss.str();
     check(count == kTupletCounts[i]);
 

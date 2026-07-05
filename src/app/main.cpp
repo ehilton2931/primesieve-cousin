@@ -121,7 +121,7 @@ void sieve(const CmdOptions& opts)
 
   ps.sieve();
 
-  const Array<std::string, 6> labels =
+  const Array<std::string, primesieve::COUNTS_INDEX_LENGTH> labels =
   {
     "Primes: ",
     "Twin primes: ",
@@ -136,11 +136,11 @@ void sieve(const CmdOptions& opts)
 
   // Did we count primes & k-tuplets simultaneously?
   int cnt = 0;
-  for (int i = 0; i < 6; i++)
+  for (int i = primesieve::COUNTS_INDEX_PRIMES; i < primesieve::COUNTS_INDEX_LENGTH; i++)
     if (ps.isCount(i))
       cnt++;
 
-  for (int i = 0; i < 6; i++)
+  for (int i = primesieve::COUNTS_INDEX_PRIMES; i < primesieve::COUNTS_INDEX_LENGTH; i++)
   {
     if (ps.isCount(i))
     {

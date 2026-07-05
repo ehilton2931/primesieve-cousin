@@ -36,14 +36,14 @@ struct SmallPrime
 
 const primesieve::Array<SmallPrime, 8> smallPrimes
 {{
-  { 2,  2, 0, "2" },
-  { 3,  3, 0, "3" },
-  { 5,  5, 0, "5" },
-  { 3,  5, 1, "(3, 5)" },
-  { 5,  7, 1, "(5, 7)" },
-  { 5, 11, 2, "(5, 7, 11)" },
-  { 5, 13, 3, "(5, 7, 11, 13)" },
-  { 5, 17, 4, "(5, 7, 11, 13, 17)" }
+  { 2,  2, primesieve::COUNTS_INDEX_PRIMES, "2" },
+  { 3,  3, primesieve::COUNTS_INDEX_PRIMES, "3" },
+  { 5,  5, primesieve::COUNTS_INDEX_PRIMES, "5" },
+  { 3,  5, primesieve::COUNTS_INDEX_TWINS, "(3, 5)" },
+  { 5,  7, primesieve::COUNTS_INDEX_TWINS, "(5, 7)" },
+  { 5, 11, primesieve::COUNTS_INDEX_TRIPLETS, "(5, 7, 11)" },
+  { 5, 13, primesieve::COUNTS_INDEX_QUADRUPLETS, "(5, 7, 11, 13)" },
+  { 5, 17, primesieve::COUNTS_INDEX_QUINTUPLETS, "(5, 7, 11, 13, 17)" }
 }};
 
 } // namespace
@@ -94,17 +94,17 @@ bool PrimeSieve::isPrintPrimes() const
 
 bool PrimeSieve::isPrint() const
 {
-  return isFlag(PRINT_PRIMES, PRINT_SEXTUPLETS);
+  return isFlag(PRINT_PRIMES, (PRINT_PRIMES) << (COUNTS_INDEX_LENGTH - 1));
 }
 
 bool PrimeSieve::isCountkTuplets() const
 {
-  return isFlag(COUNT_TWINS, COUNT_SEXTUPLETS);
+  return isFlag(COUNT_TWINS, (COUNT_PRIMES) << (COUNTS_INDEX_LENGTH - 1));
 }
 
 bool PrimeSieve::isPrintkTuplets() const
 {
-  return isFlag(PRINT_TWINS, PRINT_SEXTUPLETS);
+  return isFlag(PRINT_TWINS, (PRINT_PRIMES) << (COUNTS_INDEX_LENGTH - 1));
 }
 
 bool PrimeSieve::isStatus() const
@@ -248,7 +248,8 @@ void PrimeSieve::printStatus(double old, double current)
   }
 }
 
-/// Process small primes <= 5 and small k-tuplets <= 17
+/// Process small primes <= 5
+/// and small k-tuplets with (at least) one prime <= 5
 void PrimeSieve::processSmallPrimes()
 {
   for (auto& p : smallPrimes)
@@ -266,7 +267,7 @@ void PrimeSieve::processSmallPrimes()
 uint64_t PrimeSieve::countPrimes(uint64_t start, uint64_t stop)
 {
   sieve(start, stop, COUNT_PRIMES);
-  return getCount(0);
+  return getCount(COUNTS_INDEX_PRIMES);
 }
 
 void PrimeSieve::sieve(uint64_t start, uint64_t stop)
