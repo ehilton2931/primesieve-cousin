@@ -34,7 +34,7 @@ struct SmallPrime
   const char* str;
 };
 
-const primesieve::Array<SmallPrime, 8> smallPrimes
+const primesieve::Array<SmallPrime, 9> smallPrimes
 {{
   { 2,  2, primesieve::COUNTS_INDEX_PRIMES, "2" },
   { 3,  3, primesieve::COUNTS_INDEX_PRIMES, "3" },
@@ -43,7 +43,8 @@ const primesieve::Array<SmallPrime, 8> smallPrimes
   { 5,  7, primesieve::COUNTS_INDEX_TWINS, "(5, 7)" },
   { 5, 11, primesieve::COUNTS_INDEX_TRIPLETS, "(5, 7, 11)" },
   { 5, 13, primesieve::COUNTS_INDEX_QUADRUPLETS, "(5, 7, 11, 13)" },
-  { 5, 17, primesieve::COUNTS_INDEX_QUINTUPLETS, "(5, 7, 11, 13, 17)" }
+  { 5, 17, primesieve::COUNTS_INDEX_QUINTUPLETS, "(5, 7, 11, 13, 17)" },
+  { 3,  7, primesieve::COUNTS_INDEX_COUSINS, "(3, 7)" },
 }};
 
 } // namespace

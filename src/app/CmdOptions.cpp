@@ -224,7 +224,8 @@ void CmdOptions::optionPrint(Option& opt)
                PRINT_TRIPLETS |
                PRINT_QUADRUPLETS |
                PRINT_QUINTUPLETS |
-               PRINT_SEXTUPLETS))
+               PRINT_SEXTUPLETS |
+               PRINT_COUSINS))
     return;
 
   quiet = true;
@@ -241,6 +242,35 @@ void CmdOptions::optionPrint(Option& opt)
     case 4: flags |= PRINT_QUADRUPLETS; break;
     case 5: flags |= PRINT_QUINTUPLETS; break;
     case 6: flags |= PRINT_SEXTUPLETS; break;
+    default: throw primesieve_error("invalid option '" + opt.str + "'");
+  }
+}
+
+void CmdOptions::optionPrintPairs(Option& opt)
+{
+  // primesieve does not support printing multiple
+  // different types of primes simultaneously.
+  if (flags & (PRINT_PRIMES |
+               PRINT_TWINS |
+               PRINT_TRIPLETS |
+               PRINT_QUADRUPLETS |
+               PRINT_QUINTUPLETS |
+               PRINT_SEXTUPLETS |
+               PRINT_COUSINS))
+    return;
+
+  quiet = true;
+
+  // by default print primes
+  // This is to mirror how `-C` operates compared to `-c`.
+  if (opt.val.empty())
+    opt.val = "1";
+
+  switch (getVal<int>(opt))
+  {
+    case 1: flags |= PRINT_PRIMES; break;
+    case 2: flags |= PRINT_TWINS; break;
+    case 4: flags |= PRINT_COUSINS; break;
     default: throw primesieve_error("invalid option '" + opt.str + "'");
   }
 }
@@ -263,6 +293,28 @@ void CmdOptions::optionCount(Option& opt)
       case 4: flags |= COUNT_QUADRUPLETS; break;
       case 5: flags |= COUNT_QUINTUPLETS; break;
       case 6: flags |= COUNT_SEXTUPLETS; break;
+      default: throw primesieve_error("invalid option '" + opt.str + "'");
+    }
+  }
+}
+
+void CmdOptions::optionCountPairs(Option& opt)
+{
+  // by default count primes
+  // This is to allow `-C` to function as a drop-in replacement for `-c`
+  // when k-tuplets greater than pairs are not being considered.
+  if (opt.val.empty())
+    opt.val = "1";
+
+  int n = getVal<int>(opt);
+
+  for (; n > 0; n /= 10)
+  {
+    switch (n % 10)
+    {
+      case 1: flags |= COUNT_PRIMES; break;
+      case 2: flags |= COUNT_TWINS; break;
+      case 4: flags |= COUNT_COUSINS; break;
       default: throw primesieve_error("invalid option '" + opt.str + "'");
     }
   }
@@ -332,6 +384,8 @@ CmdOptions parseOptions(int argc, char** argv)
   {
     { "-c",                 std::make_pair(OPTION_COUNT, OPTIONAL_PARAM) },
     { "--count",            std::make_pair(OPTION_COUNT, OPTIONAL_PARAM) },
+    { "-C",                 std::make_pair(OPTION_COUNT_PAIRS, OPTIONAL_PARAM) },
+    { "--count-pairs",      std::make_pair(OPTION_COUNT_PAIRS, OPTIONAL_PARAM) },
     { "--cpu-info",         std::make_pair(OPTION_CPU_INFO, NO_PARAM) },
     { "-h",                 std::make_pair(OPTION_HELP, NO_PARAM) },
     { "--help",             std::make_pair(OPTION_HELP, NO_PARAM) },
@@ -344,6 +398,8 @@ CmdOptions parseOptions(int argc, char** argv)
     { "--dist",             std::make_pair(OPTION_DISTANCE, REQUIRED_PARAM) },
     { "-p",                 std::make_pair(OPTION_PRINT, OPTIONAL_PARAM) },
     { "--print",            std::make_pair(OPTION_PRINT, OPTIONAL_PARAM) },
+    { "-P",                 std::make_pair(OPTION_PRINT_PAIRS, OPTIONAL_PARAM) },
+    { "--print-pairs",      std::make_pair(OPTION_PRINT_PAIRS, OPTIONAL_PARAM) },
     { "-q",                 std::make_pair(OPTION_QUIET, NO_PARAM) },
     { "--quiet",            std::make_pair(OPTION_QUIET, NO_PARAM) },
     { "-R",                 std::make_pair(OPTION_R, NO_PARAM) },
@@ -372,8 +428,10 @@ CmdOptions parseOptions(int argc, char** argv)
     switch (optionID)
     {
       case OPTION_COUNT:       opts.optionCount(opt); break;
+      case OPTION_COUNT_PAIRS: opts.optionCountPairs(opt); break;
       case OPTION_DISTANCE:    opts.optionDistance(opt); break;
       case OPTION_PRINT:       opts.optionPrint(opt); break;
+      case OPTION_PRINT_PAIRS: opts.optionPrintPairs(opt); break;
       case OPTION_STRESS_TEST: opts.optionStressTest(opt); break;
       case OPTION_TIMEOUT:     opts.optionTimeout(opt); break;
       case OPTION_SIZE:        opts.sieveSize = getVal<int>(opt); break;

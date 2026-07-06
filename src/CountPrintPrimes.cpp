@@ -37,7 +37,8 @@ const uint64_t bitmasks[COUNTS_INDEX_LENGTH][5] =
   { 0x07, 0x0e, 0x1c, 0x38, ~0ull }, // Prime triplets: b00000111, b00001110, ...
   { 0x1e, ~0ull },                   // Prime quadruplets: b00011110
   { 0x1f, 0x3e, ~0ull },             // Prime quintuplets: b00011111, b00111110
-  { 0x3f, ~0ull }                    // Prime sextuplets: b00111111
+  { 0x3f, ~0ull },                   // Prime sextuplets: b00111111
+  { 0x03, 0x0c, 0x30, ~0ull }        // Cousin primes: b00000011, b00001100, b00110000
 };
 
 } // namespace

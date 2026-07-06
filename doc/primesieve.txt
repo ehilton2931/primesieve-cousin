@@ -37,6 +37,13 @@ OPTIONS
 	k-tuplets at the same time, e.g. *-c123* counts primes, twin primes and
 	prime triplets.
 
+*-C-['NUM+']::
+*--count-pairs*[='NUM+']::
+	Count primes and/or prime pairs, 'NUM' in {1,2,4}. Count primes: -C or
+	--count-pairs, count twin primes: -C2 or --count-pairs=2, count cousin
+	primes: -C4 or --count-pairs=4. You can also count primes and prime pairs at
+	the same time, e.g. *-c124* counts primes, twin primes and cousin primes.
+
 *--cpu-info*::
 	Print CPU information: CPU name, frequency, number of cores, cache sizes, ...
 
@@ -58,6 +65,12 @@ OPTIONS
 *--print*[='NUM']::
 	Print primes or prime k-tuplets, 1 \<= 'NUM' \<= 6. Print primes: *-p*,
 	print twin primes: *-p2*, print prime triplets: *-p3*, ...
+
+*-P*['NUM']::
+*--print-pairs*[=NUM']::
+	Print primes or prime pairs, NUM in {1,2,4}. Print primes: -P or
+	--print-pairs, print twin primes: -P2 or --print-pairs=2, print cousin
+	primes: -P4 or --print-pairs=4.
 
 *-q, --quiet*::
 	Quiet mode, prints less output.

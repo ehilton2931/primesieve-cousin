@@ -83,6 +83,13 @@ uint64_t count_sextuplets(uint64_t start, uint64_t stop)
   return ps.getCount(COUNTS_INDEX_SEXTUPLETS);
 }
 
+uint64_t count_cousins(uint64_t start, uint64_t stop)
+{
+  ParallelSieve ps;
+  ps.sieve(start, stop, COUNT_COUSINS);
+  return ps.getCount(COUNTS_INDEX_COUSINS);
+}
+
 void print_primes(uint64_t start, uint64_t stop)
 {
   PrimeSieve ps;
@@ -117,6 +124,12 @@ void print_sextuplets(uint64_t start, uint64_t stop)
 {
   PrimeSieve ps;
   ps.sieve(start, stop, PRINT_SEXTUPLETS);
+}
+
+void print_cousins(uint64_t start, uint64_t stop)
+{
+  PrimeSieve ps;
+  ps.sieve(start, stop, PRINT_COUSINS);
 }
 
 int get_num_threads()

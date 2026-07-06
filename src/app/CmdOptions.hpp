@@ -18,6 +18,7 @@
 enum OptionID
 {
   OPTION_COUNT,
+  OPTION_COUNT_PAIRS,
   OPTION_CPU_INFO,
   OPTION_HELP,
   OPTION_NTH_PRIME,
@@ -25,6 +26,7 @@ enum OptionID
   OPTION_NUMBER,
   OPTION_DISTANCE,
   OPTION_PRINT,
+  OPTION_PRINT_PAIRS,
   OPTION_QUIET,
   OPTION_R,
   OPTION_R_INVERSE,
@@ -67,7 +69,9 @@ struct CmdOptions
 
   void setMainOption(OptionID optionID, const std::string& optStr);
   void optionPrint(Option& opt);
+  void optionPrintPairs(Option& opt);
   void optionCount(Option& opt);
+  void optionCountPairs(Option& opt);
   void optionDistance(Option& opt);
   void optionStressTest(Option& opt);
   void optionTimeout(Option& opt);

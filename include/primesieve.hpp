@@ -136,6 +136,13 @@ uint64_t count_quintuplets(uint64_t start, uint64_t stop);
 ///
 uint64_t count_sextuplets(uint64_t start, uint64_t stop);
 
+/// Count the cousin primes within the interval [start, stop].
+/// By default all CPU cores are used, use
+/// primesieve::set_num_threads(int threads) to change the
+/// number of threads.
+///
+uint64_t count_cousins(uint64_t start, uint64_t stop);
+
 /// Print the primes within the interval [start, stop]
 /// to the standard output.
 ///
@@ -165,6 +172,11 @@ void print_quintuplets(uint64_t start, uint64_t stop);
 /// to the standard output.
 ///
 void print_sextuplets(uint64_t start, uint64_t stop);
+
+/// Print the cousin primes within the interval [start, stop]
+/// to the standard output.
+///
+void print_cousins(uint64_t start, uint64_t stop);
 
 /// Returns the largest valid stop number for primesieve.
 /// @return 2^64-1 (UINT64_MAX).

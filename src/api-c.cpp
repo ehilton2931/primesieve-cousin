@@ -224,6 +224,20 @@ uint64_t primesieve_count_sextuplets(uint64_t start, uint64_t stop)
   }
 }
 
+uint64_t primesieve_count_cousins(uint64_t start, uint64_t stop)
+{
+  try
+  {
+    return count_cousins(start, stop);
+  }
+  catch (const std::exception& e)
+  {
+    std::cerr << "primesieve_count_cousins: " << e.what() << std::endl;
+    errno = EDOM;
+    return PRIMESIEVE_ERROR;
+  }
+}
+
 void primesieve_print_primes(uint64_t start, uint64_t stop)
 {
   try
@@ -298,6 +312,19 @@ void primesieve_print_sextuplets(uint64_t start, uint64_t stop)
   catch (const std::exception& e)
   {
     std::cerr << "primesieve_print_sextuplets: " << e.what() << std::endl;
+    errno = EDOM;
+  }
+}
+
+void primesieve_print_cousins(uint64_t start, uint64_t stop)
+{
+  try
+  {
+    print_cousins(start, stop);
+  }
+  catch (const std::exception& e)
+  {
+    std::cerr << "primesieve_print_cousins: " << e.what() << std::endl;
     errno = EDOM;
   }
 }
