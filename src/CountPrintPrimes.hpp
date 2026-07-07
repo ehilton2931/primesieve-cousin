@@ -42,9 +42,10 @@ private:
   PrimeSieve& ps_;
   MemoryPool memoryPool_;
   void initCounts();
-  void countkTuplets();
+  bool countkTuplets(bool last31wasPrime);
   void printPrimes();
-  void printkTuplets();
+  bool printkTuplets(bool last31wasPrime);
+  void printkTuplets_helper(uint64_t bits, uint64_t low);
 };
 
 } // namespace

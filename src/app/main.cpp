@@ -129,7 +129,8 @@ void sieve(const CmdOptions& opts)
     "Prime quadruplets: ",
     "Prime quintuplets: ",
     "Prime sextuplets: ",
-    "Cousin primes: "
+    "Cousin primes: ",
+    "Sexy primes: "
   };
 
   if (opts.time)

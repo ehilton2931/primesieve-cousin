@@ -90,6 +90,13 @@ uint64_t count_cousins(uint64_t start, uint64_t stop)
   return ps.getCount(COUNTS_INDEX_COUSINS);
 }
 
+uint64_t count_sexys(uint64_t start, uint64_t stop)
+{
+  ParallelSieve ps;
+  ps.sieve(start, stop, COUNT_SEXYS);
+  return ps.getCount(COUNTS_INDEX_SEXYS);
+}
+
 void print_primes(uint64_t start, uint64_t stop)
 {
   PrimeSieve ps;
@@ -130,6 +137,12 @@ void print_cousins(uint64_t start, uint64_t stop)
 {
   PrimeSieve ps;
   ps.sieve(start, stop, PRINT_COUSINS);
+}
+
+void print_sexys(uint64_t start, uint64_t stop)
+{
+  PrimeSieve ps;
+  ps.sieve(start, stop, PRINT_SEXYS);
 }
 
 int get_num_threads()

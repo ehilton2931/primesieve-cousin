@@ -225,7 +225,8 @@ void CmdOptions::optionPrint(Option& opt)
                PRINT_QUADRUPLETS |
                PRINT_QUINTUPLETS |
                PRINT_SEXTUPLETS |
-               PRINT_COUSINS))
+               PRINT_COUSINS |
+               PRINT_SEXYS))
     return;
 
   quiet = true;
@@ -256,7 +257,8 @@ void CmdOptions::optionPrintPairs(Option& opt)
                PRINT_QUADRUPLETS |
                PRINT_QUINTUPLETS |
                PRINT_SEXTUPLETS |
-               PRINT_COUSINS))
+               PRINT_COUSINS |
+               PRINT_SEXYS))
     return;
 
   quiet = true;
@@ -271,6 +273,7 @@ void CmdOptions::optionPrintPairs(Option& opt)
     case 1: flags |= PRINT_PRIMES; break;
     case 2: flags |= PRINT_TWINS; break;
     case 4: flags |= PRINT_COUSINS; break;
+    case 6: flags |= PRINT_SEXYS; break;
     default: throw primesieve_error("invalid option '" + opt.str + "'");
   }
 }
@@ -315,6 +318,7 @@ void CmdOptions::optionCountPairs(Option& opt)
       case 1: flags |= COUNT_PRIMES; break;
       case 2: flags |= COUNT_TWINS; break;
       case 4: flags |= COUNT_COUSINS; break;
+      case 6: flags |= COUNT_SEXYS; break;
       default: throw primesieve_error("invalid option '" + opt.str + "'");
     }
   }

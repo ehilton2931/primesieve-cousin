@@ -78,7 +78,8 @@ void countPrimeKTuplets()
     38270,    // PrimePi4(10^14, 10^14+10^10)
     4107,     // PrimePi5(10^15, 10^15+10^10)
     66,       // PrimePi6(10^16, 10^16+10^10)
-    8619281   // PrimePiCousin(10^17, 10^17+10^10)
+    8619281,  // PrimePiCousin(10^17, 10^17+10^10)
+    15372572, // PrimePiSexy(10^18, 10^18+10^10)
   };
 
   uint64_t start = (uint64_t) 1e12;

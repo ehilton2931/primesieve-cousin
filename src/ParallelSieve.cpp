@@ -98,22 +98,22 @@ uint64_t ParallelSieve::getThreadDistance(int threads) const
 
   uint64_t threadDist = ((dist - 1) / iters) + 1;
   threadDist = std::max(threadDist, config::MIN_THREAD_DISTANCE);
-  threadDist += 30 - threadDist % 30;
+  threadDist += 210 - threadDist % 210;
 
   return threadDist;
 }
 
-/// (n % 30) == 2 ensures that prime k-tuplets
+/// (n % 210) == 2 ensures that prime k-tuplets
 /// cannot be split at thread boundaries.
 ///
 uint64_t ParallelSieve::align(uint64_t n) const
 {
-  uint64_t n32 = checkedAdd(n, 32);
+  uint64_t n212 = checkedAdd(n, 212);
 
-  if (n32 >= stop_)
+  if (n212 >= stop_)
     return stop_;
   else
-    return n32 - n % 30;
+    return n212 - n % 210;
 }
 
 /// Print sieving status to stdout

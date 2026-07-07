@@ -30,7 +30,7 @@ using namespace primesieve;
 
 namespace {
 
-const uint64_t bitmasks[COUNTS_INDEX_LENGTH][5] =
+const uint64_t bitmasks[COUNTS_INDEX_LENGTH][6] =
 {
   { ~0ull },                         // Prime numbers, unused
   { 0x06, 0x18, 0xc0, ~0ull },       // Twin primes: b00000110, b00011000, b11000000
@@ -38,7 +38,8 @@ const uint64_t bitmasks[COUNTS_INDEX_LENGTH][5] =
   { 0x1e, ~0ull },                   // Prime quadruplets: b00011110
   { 0x1f, 0x3e, ~0ull },             // Prime quintuplets: b00011111, b00111110
   { 0x3f, ~0ull },                   // Prime sextuplets: b00111111
-  { 0x03, 0x0c, 0x30, ~0ull }        // Cousin primes: b00000011, b00001100, b00110000
+  { 0x03, 0x0c, 0x30, ~0ull },       // Cousin primes: b00000011, b00001100, b00110000
+  { 0x05, 0x0a, 0x14, 0x28, 0x60, ~0ull } // Sexy primes (lower bound)
 };
 
 } // namespace
@@ -136,6 +137,8 @@ void CountPrintPrimes::sieve()
   uint64_t sieveSize = ps_.getSieveSize();
   SievingPrimes sievingPrimes(this, sieveSize, memoryPool_);
   uint64_t prime = sievingPrimes.next();
+  bool previousLast31wasPrime = false;
+  bool currentLast31isPrime = false;
 
   while (hasNextSegment())
   {
@@ -150,18 +153,21 @@ void CountPrintPrimes::sieve()
     if (ps_.isCountPrimes())
       counts_[COUNTS_INDEX_PRIMES] += popcount(sieve_);
     if (ps_.isCountkTuplets())
-      countkTuplets();
+      currentLast31isPrime = countkTuplets(previousLast31wasPrime);
     if (ps_.isPrintPrimes())
       printPrimes();
     if (ps_.isPrintkTuplets())
-      printkTuplets();
+      currentLast31isPrime = printkTuplets(previousLast31wasPrime);
     if (ps_.isStatus())
       ps_.updateStatus(sieve_.size() * 240);
+
+    previousLast31wasPrime = currentLast31isPrime;
   }
 }
 
-void CountPrintPrimes::countkTuplets()
+bool CountPrintPrimes::countkTuplets(bool last31wasPrime)
 {
+  bool ret = false;
   // i = 1 twins, i = 2 triplets, ...
   for (unsigned i = COUNTS_INDEX_TWINS; i < counts_.size(); i++)
   {
@@ -179,9 +185,24 @@ void CountPrintPrimes::countkTuplets()
         sum += kCounts_[i][sieve[j+3]];
       }
 
+      if (i == COUNTS_INDEX_SEXYS)
+      {
+        if (last31wasPrime)
+          if (sieve[0] & 0x1)
+            sum++;
+        for (std::size_t j = 1; j < sieveBytes; j++)
+          if (sieve[j-1] & 0x80 /*31 mod 30*/)
+            if (sieve[j] & 0x1 /*7 mod 30*/)
+              sum++;
+        if (sieve[sieveBytes-1] & 0x80)
+          ret = true;
+      }
+
       counts_[i] += sum;
     }
   }
+
+  return ret;
 }
 
 /// Print primes to stdout
@@ -215,7 +236,7 @@ void CountPrintPrimes::printPrimes()
 }
 
 /// Print prime k-tuplets to stdout
-void CountPrintPrimes::printkTuplets()
+bool CountPrintPrimes::printkTuplets(bool last31wasPrime)
 {
   // i = 1 twins, i = 2 triplets, ...
   unsigned i = COUNTS_INDEX_TWINS;
@@ -229,34 +250,39 @@ void CountPrintPrimes::printkTuplets()
 
   for (std::size_t j = 0; j < sieveBytes; j++, low += 30)
   {
+    if ((i == COUNTS_INDEX_SEXYS) && last31wasPrime)
+      if (sieve[j] & 0x1 /*7 mod 30*/)
+        printkTuplets_helper(0x0a, low-10); // Fake an 11,17 sexy pair
     for (auto* bitmask = bitmasks[i]; *bitmask <= sieve[j]; bitmask++)
-    {
       if ((sieve[j] & *bitmask) == *bitmask)
-      {
-        charBuffer_.push_back('(');
-        uint64_t bits = *bitmask;
-
-        for (; bits != 0; bits &= bits - 1)
-        {
-          uint64_t prime = nextPrime(bits, low);
-          append_prime_as_string(charBuffer_, prime);
-
-          if (bits & (bits - 1))
-          {
-            charBuffer_.push_back(',');
-            charBuffer_.push_back(' ');
-          }
-          else
-          {
-            charBuffer_.push_back(')');
-            charBuffer_.push_back('\n');
-          }
-        }
-      }
-    }
+        printkTuplets_helper(*bitmask, low);
+    last31wasPrime = (sieve[j] & 0x80 /*31 mod 30*/) != 0;
   }
 
   std::cout.write(charBuffer_.data(), charBuffer_.size());
+  return last31wasPrime;
+}
+
+void CountPrintPrimes::printkTuplets_helper(uint64_t bits, uint64_t low)
+{
+  charBuffer_.push_back('(');
+
+  for (; bits != 0; bits &= bits - 1)
+  {
+    uint64_t prime = nextPrime(bits, low);
+    append_prime_as_string(charBuffer_, prime);
+
+    if (bits & (bits - 1))
+    {
+      charBuffer_.push_back(',');
+      charBuffer_.push_back(' ');
+    }
+    else
+    {
+      charBuffer_.push_back(')');
+      charBuffer_.push_back('\n');
+    }
+  }
 }
 
 } // namespace
